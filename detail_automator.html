@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            function validate() {
+
+                clear()
+
+                var inputArray = document.getElementById("input-text").value.split(/\n/)
+
+                inputArray = stripRated(inputArray)
+
+                for (var i = 0; i < inputArray.length; i++) {
+                    
+                    inputArray[i] = inputArray[i].toLowerCase();
+
+                     document.getElementById("result").innerHTML += inputArray[i] + "<br>"
+    
+                }
+                
+               // document.getElementById("result").innerHTML = inputArray
+
+            }
+            
+            //deprecated
+            function firstChar(string) {
+                return string.substr(0, 1)
+            }
+
+            function stripRated(array) {
+                for (var i = 0; i < array.length; i++) {
+                    if (array[i].match(/rated:/gi)) {
+                        //removes next 2 elements, the rating & the text-form of the rating
+                        array.splice(i + 1, 2)
+                    }
+                }
+            
+                return array
+            }
+
+            function clear() {
+                document.getElementById("result").innerHTML = ""
+            }
+
+        </script>
+    </head>
+    <body>
+        <textarea rows=10 cols=80 id="input-text"></textarea>
+        <br>
+        <button id="submit-text" onclick="validate()">Submit</button>
+        <br>
+        <span id="result"></span>
+    </body>
+</html>
