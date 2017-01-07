@@ -1,24 +1,42 @@
 <!DOCTYPE html>
 <html>
     <head>
+    </head>
+    <body>
+        <textarea rows=10 cols=80 id="input-text"></textarea>
+        <br>
+        <button id="submit-text" onclick="validate()">Submit</button>
+        <br>
+        <span id="result"></span>
         <script>
             function validate() {
 
                 clear()
 
+                var regex = /actors\b|directors\b|writers\b|producers\b|format\b|language\b|subtitles\b|region\b|discs\b|rated\b|studio\b|release\b|digital\b|run time\b|review\b|asin\b|rank\b/i
+
                 var inputArray = document.getElementById("input-text").value.split(/\n/)
+
+                var needsFix = false
 
                 inputArray = stripRated(inputArray)
 
                 for (var i = 0; i < inputArray.length; i++) {
                     
-                    inputArray[i] = inputArray[i].toLowerCase();
+                    //inputArray[i] = inputArray[i].toLowerCase();
 
-                     document.getElementById("result").innerHTML += inputArray[i] + "<br>"
-    
+                    if (regex.test(inputArray[i])) {
+                        document.getElementById("result").innerHTML += inputArray[i] + "<br>"
+                        continue
+                    }
+                    else {
+                        needsFix = true
+                        break
+                    }
+
                 }
                 
-               // document.getElementById("result").innerHTML = inputArray
+               setResult(needsFix)
 
             }
             
@@ -38,17 +56,20 @@
                 return array
             }
 
+            function setResult(boolean) {
+                var rSpan = document.getElementById("result")
+                if (!boolean) {
+                    rSpan.innerHTML = "Valid!"
+                }
+                else {
+                    rSpan.innerHTML = "Fix!"
+                }
+            }
+
             function clear() {
                 document.getElementById("result").innerHTML = ""
             }
 
         </script>
-    </head>
-    <body>
-        <textarea rows=10 cols=80 id="input-text"></textarea>
-        <br>
-        <button id="submit-text" onclick="validate()">Submit</button>
-        <br>
-        <span id="result"></span>
     </body>
 </html>
