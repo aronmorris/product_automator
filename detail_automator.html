@@ -9,11 +9,34 @@
         <br>
         <span id="result"></span>
         <script>
+            //To be clear, this is the very first Javascript stuff I'm writing ever so it's not as optimized as it could be quite yet
+
             function validate() {
 
                 clear()
 
                 var regex = /actors\b|directors\b|writers\b|producers\b|format\b|language\b|subtitles\b|region\b|discs\b|rated\b|studio\b|release\b|digital\b|run time\b|review\b|asin\b|rank\b/i
+
+                //Once each of these terms validates as true then the list is valid
+                var necessaryTerms = {
+                    "actors": false,
+                    "directors": false,
+                    "writers": false,
+                    "producers": false,
+                    "format": false,
+                    "language": false,
+                    "subtitles": false,
+                    "region": false,
+                    "discs": false,
+                    "rated": false,
+                    "studio": false,
+                    "release": false,
+                    "digital": false,
+                    "run time": false,
+                    "review": false,
+                    "asin": false,
+                    "rank": false
+                }
 
                 var inputArray = document.getElementById("input-text").value.split(/\n/)
 
@@ -23,20 +46,23 @@
 
                 for (var i = 0; i < inputArray.length; i++) {
                     
-                    //inputArray[i] = inputArray[i].toLowerCase();
+                    inputArray[i] = inputArray[i].toLowerCase()
 
-                    if (regex.test(inputArray[i])) {
+                    var term = regex.match(inputArray[i])
+
+                    if (term in necessaryTerms) { //check if the regex-matched word is in the dictionary of terms
                         document.getElementById("result").innerHTML += inputArray[i] + "<br>"
+                        necessaryTerms[term] = true
                         continue
                     }
-                    else {
-                        needsFix = true
+                    else { //otherwise if a line contains none of the terms break immediately
                         break
                     }
 
                 }
                 
-               setResult(needsFix)
+                //and finally display the result (i.e. needs fixing or it's valid)
+               setResult(allTermsMatched(necessaryTerms))
 
             }
             
@@ -64,6 +90,15 @@
                 else {
                     rSpan.innerHTML = "Fix!"
                 }
+            }
+
+            function allTermsMatched(terms) {
+                for (key in terms) {
+                    if (!(terms[key])) {
+                        return false
+                    }
+                }
+                return true
             }
 
             function clear() {
