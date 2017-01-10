@@ -15,7 +15,7 @@
 
                 clear()
 
-                var regex = /actors\b|directors\b|writers\b|producers\b|format\b|language\b|subtitles\b|region\b|discs\b|rated\b|studio\b|release\b|digital\b|run time\b|review\b|asin\b|rank\b/i
+                var regex = /actors\b|directors\b|writers\b|producers\b|format\b|language\b|subtitles\b|region\b|aspect\b|discs\b|rated\b|studio\b|release\b|digital\b|run time\b|review\b|asin\b|rank\b/i
 
                 //Once each of these terms validates as true then the list is valid
                 var necessaryTerms = {
@@ -28,6 +28,7 @@
                     "subtitles": false,
                     "region": false,
                     "discs": false,
+                    "aspect": false,
                     "rated": false,
                     "studio": false,
                     "release": false,
@@ -48,7 +49,7 @@
                     
                     inputArray[i] = inputArray[i].toLowerCase()
 
-                    var term = regex.match(inputArray[i])
+                    var term = inputArray[i].match(regex)
 
                     if (term in necessaryTerms) { //check if the regex-matched word is in the dictionary of terms
                         document.getElementById("result").innerHTML += inputArray[i] + "<br>"
@@ -84,7 +85,7 @@
 
             function setResult(boolean) {
                 var rSpan = document.getElementById("result")
-                if (!boolean) {
+                if (boolean) {
                     rSpan.innerHTML = "Valid!"
                 }
                 else {
