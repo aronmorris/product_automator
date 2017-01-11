@@ -15,9 +15,10 @@
 
                 clear()
 
-                var regex = /actors\b|directors\b|writers\b|producers\b|format\b|language\b|subtitles\b|region\b|aspect\b|discs\b|rated\b|studio\b|release\b|digital\b|run time\b|review\b|asin\b|rank\b/i
+                var regex = /actors\b|directors\b|writers\b|producers\b|format\b|language\b|subtitles\b|region\b|aspect\b|discs\b|rated\b|studio\b|release\b|run time\b|review\b|asin\b|rank\b/i
 
                 //Once each of these terms validates as true then the list is valid
+                //These are specifically selected terms to search for
                 var necessaryTerms = {
                     "actors": false,
                     "directors": false,
@@ -32,7 +33,6 @@
                     "rated": false,
                     "studio": false,
                     "release": false,
-                    "digital": false,
                     "run time": false,
                     "review": false,
                     "asin": false,
@@ -43,7 +43,7 @@
 
                 var needsFix = false
 
-                inputArray = stripRated(inputArray)
+                inputArray = stripDigital(stripRated(inputArray)) //strips unecessary terms (TODO? turn into its own function in place of nested function for clarity if program expands
 
                 for (var i = 0; i < inputArray.length; i++) {
                     
@@ -63,7 +63,7 @@
                 }
                 
                 //and finally display the result (i.e. needs fixing or it's valid)
-               setResult(allTermsMatched(necessaryTerms))
+               setResult(allTermsMatched(necessaryTerms), necessaryTerms)
 
             }
             
@@ -82,15 +82,27 @@
             
                 return array
             }
+			
+			function stripDigital(array) {
+				for (string in array) {
+					if (string.match(/digital/gi)) {
+						array.splice(array.indexOf(string), 1)
+					}
+				}
+				
+				return array
+			}
 
-            function setResult(boolean) {
+            function setResult(boolean, terms) {
                 var rSpan = document.getElementById("result")
                 if (boolean) {
                     rSpan.innerHTML = "Valid!"
                 }
                 else {
-                    rSpan.innerHTML = "Fix!"
+                    rSpan.innerHTML = "Fix! <br>"
+                    displayUnmatchedTerms(terms)
                 }
+                document.getElementById("input-text").value = ""
             }
 
             function allTermsMatched(terms) {
@@ -100,6 +112,12 @@
                     }
                 }
                 return true
+            }
+
+            function displayUnmatchedTerms(terms) {
+                for (key in terms) {
+                    document.getElementById("result").innerHTML += terms[key] == false ? key + "<br>" : ""
+                }
             }
 
             function clear() {
